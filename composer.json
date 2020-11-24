@@ -1,0 +1,30 @@
+{
+  "name": "jncinet/qihucms-user-task",
+  "description": "qihucms user task.",
+  "keywords": [
+    "laravel",
+    "qihucms",
+    "task"
+  ],
+  "homepage": "https://www.qihucms.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "zhangye",
+      "email": "zy@qilephp.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Qihucms\\UserTask\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Qihucms\\UserTask\\TaskServiceProvider"
+      ]
+    }
+  }
+}
