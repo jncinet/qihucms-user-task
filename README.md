@@ -103,8 +103,6 @@ $ composer require jncinet/qihucms-user-task
 'saved' => TaskCompleted::class
 ```
 
-## 通知
-
 ## 数据库
 ### 任务表：user_tasks
 | Field             | Type      | Length    | AllowNull | Default   | Comment   |
@@ -117,11 +115,23 @@ $ composer require jncinet/qihucms-user-task
 | end_time          | timestamp |           | Y         | NULL      | 结束时间   |
 | stock             | int       |           |           | 0         | 任务总数量 |
 | currency_type_id  | bigint    |           |           |           | 奖励类型ID |
-| amount            | decimal   | 10,2      |           | 0.00      | 奖励金额   |
+| amount            | decimal   | 8,2       |           | 0.00      | 奖励金额   |
 | content           | longtext  |           | Y         |           | 任务介绍   |
 | btn_text          | varchar   | 255       | Y         | NULL      | 链接文字   |
 | link              | varchar   | 255       | Y         | NULL      | 链接地址   |
-| pay_status        | tinyint   |           | 0         | 0         | 奖金托管状态|
-| status            | tinyint   |           | 0         | 0         | 任务状态   |
+| pay_status        | tinyint   |           |           | 0         | 奖金托管状态|
+| status            | tinyint   |           |           | 0         | 任务状态   |
+| created_at        | timestamp |           | Y         | NULL      | 创建时间   |
+| updated_at        | timestamp |           | Y         | NULL      | 更新时间   |
+
+### 任务表完成记录：user_task_orders
+| Field             | Type      | Length    | AllowNull | Default   | Comment   |
+| :----             | :----     | :----     | :----     | :----     | :----     |
+| id                | bigint    |           |           |           |           |
+| user_id           | bigint    |           |           |           | 发布会员ID |
+| user_task_id      | bigint    |           |           |           | 完成任务ID |
+| files             | json      |           | Y         | NULL      | 任务图片凭证|
+| content           | text      |           | Y         |           | 完成介绍   |
+| status            | tinyint   |           |           | 0         | 完成状态   |
 | created_at        | timestamp |           | Y         | NULL      | 创建时间   |
 | updated_at        | timestamp |           | Y         | NULL      | 更新时间   |
