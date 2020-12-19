@@ -5,6 +5,7 @@ namespace Qihucms\UserTask\Resources;
 use App\Http\Resources\User\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class UserTaskOrder extends JsonResource
 {
@@ -20,7 +21,7 @@ class UserTaskOrder extends JsonResource
 
         if (is_array($this->files) && count($this->files)) {
             foreach ($this->files as $key => $file) {
-                $files[$key] = \Storage::url($file);
+                $files[$key] = Storage::url($file);
             }
         } else {
             $files = null;

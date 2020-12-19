@@ -5,6 +5,7 @@ namespace Qihucms\UserTask\Resources;
 use App\Http\Resources\User\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 use Qihucms\Currency\Resources\Type\Type;
 
 class UserTask extends JsonResource
@@ -21,7 +22,7 @@ class UserTask extends JsonResource
             'id' => $this->id,
             'user' => new User($this->user),
             'title' => $this->title,
-            'thumbnail' => !empty($this->thumbnail) ? \Storage::url($this->thumbnail) : null,
+            'thumbnail' => !empty($this->thumbnail) ? Storage::url($this->thumbnail) : null,
             'start_time' => $this->start_time ? Carbon::parse($this->start_time)->toDateTimeString() : null,
             'end_time' => $this->start_time ? Carbon::parse($this->end_time)->toDateTimeString() : null,
             'stock' => $this->stock,

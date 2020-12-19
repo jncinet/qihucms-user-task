@@ -5,6 +5,7 @@ namespace Qihucms\UserTask\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Qihucms\Currency\Currency;
 use Qihucms\UserTask\Models\UserTask;
 use Qihucms\UserTask\Models\UserTaskOrder;
@@ -32,8 +33,8 @@ class OrderController extends Controller
         $task = UserTask::find($request->get('user_task_id'));
 
         // 验证当前用户是否任务发布者
-        if ($task && $task->user_id != \Auth::id()) {
-            return $this->jsonResponse(['参数错误'], '', 422);
+        if ($task && $task->user_id != Auth::id()) {
+            return $this->jsonResponse([__('user-task::message.invalid_parameter')], '', 422);
         } else {
             $condition = [['user_task_id', '=', $task->id]];
         }
@@ -58,11 +59,11 @@ class OrderController extends Controller
         $item = UserTaskOrder::find($id);
 
         // 任务发布者和任务完成者可查看任务详细
-        if ($item && ($item->user_id == \Auth::id() || $item->user_task->user_id == \Auth::id())) {
+        if ($item && ($item->user_id == Auth::id() || $item->user_task->user_id == Auth::id())) {
             return new UserTaskOrderResource($item);
         }
 
-        return $this->jsonResponse(['参数错误'], '', 422);
+        return $this->jsonResponse([__('user-task::message.invalid_parameter')], '', 422);
     }
 
     /**
@@ -77,17 +78,17 @@ class OrderController extends Controller
         $item = UserTaskOrder::find($id);
 
         // 当前用户是否任务发布者,且任务已经提交审核
-        if ($item && $item->user_task && $item->user_task->user_id == \Auth::id() && $item->status == 2) {
+        if ($item && $item->user_task && $item->user_task->user_id == Auth::id() && $item->status == 2) {
             $item->status = $request->input('status', 1) == 1 ? 1 : 3;
             if ($item->save()) {
                 // 发放任务奖励
                 $currency_result = Currency::entry(
-                    \Auth::id(),
+                    Auth::id(),
                     $item->user_task->currency_type_id,
                     $item->user_task->amount,
                     'completed_task_reward',
                     $item->id,
-                    '完成任务，发放任务奖金'
+                    __('user-task::message.completed_task_reward')
                 );
                 if ($currency_result !== 100) {
                     // 退回原状态
@@ -102,7 +103,7 @@ class OrderController extends Controller
             }
         }
 
-        return $this->jsonResponse(['参数错误'], '', 422);
+        return $this->jsonResponse([__('user-task::message.invalid_parameter')], '', 422);
     }
 
     /**
@@ -122,15 +123,15 @@ class OrderController extends Controller
                 $task->save();
             }
 
-            return $this->jsonResponse(['任务已被领完了'], '', 422);
+            return $this->jsonResponse([trans('user-task::message.task_end')], '', 422);
         }
 
-        if (UserTaskOrder::where('user_task_id', $task->id)->where('user_id', \Auth::id())->exists()) {
-            return $this->jsonResponse(['任务已经领取过了'], '', 422);
+        if (UserTaskOrder::where('user_task_id', $task->id)->where('user_id', Auth::id())->exists()) {
+            return $this->jsonResponse([trans('user-task::message.task_received')], '', 422);
         }
 
         $data['user_task_id'] = $task->id;
-        $data['user_id'] = \Auth::id();
+        $data['user_id'] = Auth::id();
         $data['status'] = 0;
         $order = UserTaskOrder::create($data);
 
@@ -149,13 +150,13 @@ class OrderController extends Controller
         $data = $request->only(['user_task_id', 'files', 'remark']);
         $data['status'] = 2;
 
-        $result = UserTaskOrder::where('id', $id)->where('user_id', \Auth::id())->update($data);
+        $result = UserTaskOrder::where('id', $id)->where('user_id', Auth::id())->update($data);
 
         if ($result) {
             return $this->jsonResponse(['id' => $id]);
         }
 
-        return $this->jsonResponse(['提交失败'], '', 422);
+        return $this->jsonResponse([__('user-task::message.submit_fail')], '', 422);
     }
 
     /**
@@ -166,10 +167,10 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        if (UserTaskOrder::where('id', $id)->where('user_id', \Auth::id())->where('status', 0)->delete()) {
+        if (UserTaskOrder::where('id', $id)->where('user_id', Auth::id())->where('status', 0)->delete()) {
             return $this->jsonResponse(['id' => $id]);
         }
 
-        return $this->jsonResponse(['删除失败'], '', 422);
+        return $this->jsonResponse([trans('user-task::message.delete_fail')], '', 422);
     }
 }

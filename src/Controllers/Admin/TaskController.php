@@ -73,7 +73,7 @@ class TaskController extends AdminController
 
         $show->field('id', __('user-task::task.id'));
         $show->field('user', __('user-task::task.user_id'))->as(function () {
-            return $this->user ? $this->user->username : '会员不存在';
+            return $this->user ? $this->user->username : trans('user-task::message.record_does_not_exist');
         });
         $show->field('title', __('user-task::task.title'));
         $show->field('thumbnail', __('user-task::task.thumbnail'))->image();
@@ -81,7 +81,7 @@ class TaskController extends AdminController
         $show->field('end_time', __('user-task::task.end_time'));
         $show->field('stock', __('user-task::task.stock'));
         $show->field('currency_type_id', __('user-task::task.currency_type_id'))->as(function () {
-            return $this->currency_type ? $this->currency_type->name : '货币不存在';
+            return $this->currency_type ? $this->currency_type->name : trans('user-task::message.record_does_not_exist');
         });
         $show->field('amount', __('user-task::task.amount'));
         $show->field('content', __('user-task::task.content'))->unescape();

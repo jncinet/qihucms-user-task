@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Qihucms\Currency\Currency;
 use Qihucms\UserTask\Models\UserTask;
 use Qihucms\UserTask\Models\UserTaskOrder;
@@ -43,7 +44,7 @@ class TaskController extends Controller
     {
         $limit = $request->get('limit', 15);
 
-        $condition = [['user_id', '=', \Auth::id()]];
+        $condition = [['user_id', '=', Auth::id()]];
 
         if ($request->has('status')) {
             $condition[] = ['status', '=', $request->get('status')];
@@ -101,7 +102,7 @@ class TaskController extends Controller
      */
     public function userShow($id)
     {
-        $task = UserTask::where('user_id', \Auth::id())->where('id', $id)->with('user_task_orders')->first();
+        $task = UserTask::where('user_id', Auth::id())->where('id', $id)->with('user_task_orders')->first();
 
         return new UserTaskResource($task);
     }
@@ -131,7 +132,7 @@ class TaskController extends Controller
             'title', 'thumbnail', 'start_time', 'end_time', 'stock',
             'currency_type_id', 'amount', 'content', 'btn_text', 'link'
         ]);
-        $data['user_id'] = \Auth::id();
+        $data['user_id'] = Auth::id();
         $data['pay_status'] = 1;
         $data['status'] = 0;
         if (!isset($data['start_time']) || empty($data['start_time'])) {
@@ -150,12 +151,12 @@ class TaskController extends Controller
             if ($fee > 0) {
                 // 读取会员账户托管任务奖金
                 $currency_result = Currency::expend(
-                    \Auth::id(),
+                    Auth::id(),
                     $data['currency_type_id'],
                     $fee,
                     'create_task',
                     $result->id,
-                    '发布任务，托管奖金'
+                    __('user-task::message.create_task')
                 );
 
                 if ($currency_result !== 100) {
@@ -170,7 +171,7 @@ class TaskController extends Controller
             return new UserTaskResource($result);
         }
 
-        return $this->jsonResponse(['发布失败'], '', 422);
+        return $this->jsonResponse([__('user-task::message.send_fail')], '', 422);
     }
 
     /**
@@ -185,14 +186,14 @@ class TaskController extends Controller
         $data = $request->only(['end_time', 'status']);
 
         if ($request->has('end_time') && Carbon::parse($data['end_time'])->lte(Carbon::now())) {
-            return $this->jsonResponse(['任务时间太短了'], '', 422);
+            return $this->jsonResponse([__('user-task::message.datetime_error')], '', 422);
         }
 
         if ($request->has('status')) {
             $data['status'] = 2;
         }
 
-        $task = UserTask::where('user_id', \Auth::id())->where('id', $id)->first();
+        $task = UserTask::where('user_id', Auth::id())->where('id', $id)->first();
 
         if (isset($data['end_time'])) {
             $task->end_time = $data['end_time'];
@@ -213,12 +214,12 @@ class TaskController extends Controller
                 $refund_fee = bcmul($residue_count, $task->amount, 2);
                 // 退款
                 $currency_result = Currency::entry(
-                    \Auth::id(),
+                    Auth::id(),
                     $task->currency_type_id,
                     $refund_fee,
                     'cancel_task_refund',
                     $task->id,
-                    '结束订单，退还剩余奖金'
+                    __('user-task::message.cancel_task_refund')
                 );
                 if ($currency_result !== 100) {
                     // 退回原状态
@@ -233,7 +234,7 @@ class TaskController extends Controller
             return $this->jsonResponse(['id' => $id, 'status' => $task->status]);
         }
 
-        return $this->jsonResponse(['操作失败'], '', 422);
+        return $this->jsonResponse([__('user-task::message.submit_fail')], '', 422);
     }
 
     /**
@@ -244,10 +245,14 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $task = UserTask::where('user_id', \Auth::id())->where('id', $id)->first();
+        $task = UserTask::where('user_id', Auth::id())->where('id', $id)->first();
 
         if ($task->user_task_orders && $task->user_task_orders->count() > 0) {
-            return $this->jsonResponse(['已经开始的任务无法删除'], '', 422);
+            return $this->jsonResponse(
+                [__('user-task::message.delete_fail_for_started')],
+                '',
+                422
+            );
         }
 
         // 已托管奖金需退回
@@ -256,12 +261,12 @@ class TaskController extends Controller
             $refund_fee = bcmul($task->stock, $task->amount, 2);
 
             $currency_result = Currency::entry(
-                \Auth::id(),
+                Auth::id(),
                 $task->currency_type_id,
                 $refund_fee,
                 'cancel_task_refund',
                 $task->id,
-                '结束订单，退还剩余奖金'
+                __('user-task::message.cancel_task_refund')
             );
 
             if ($currency_result !== 100) {
@@ -274,6 +279,6 @@ class TaskController extends Controller
             return $this->jsonResponse(['id' => $id]);
         }
 
-        return $this->jsonResponse(['删除失败'], '', 422);
+        return $this->jsonResponse([__('user-task::message.delete_fail')], '', 422);
     }
 }

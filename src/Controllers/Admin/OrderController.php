@@ -17,7 +17,7 @@ class OrderController extends AdminController
      *
      * @var string
      */
-    protected $title = '任务领取';
+    protected $title = '任务完成记录';
 
     /**
      * Make a grid builder.
@@ -36,12 +36,18 @@ class OrderController extends AdminController
             $filter->disableIdFilter();
 
             // 在这里添加字段过滤器
-            $filter->like('name', __('user-task::order.name'));
+            $filter->like('user_task.title', __('user-task::order.user_task_id'));
+            $filter->equal('user_id', __('user-task::order.user_id'));
+            $filter->equal('status', __('user-task::order.status.label'))
+                ->select(__('user-task::order.status.value'));
 
         });
 
         $grid->column('id', __('user-task::order.id'));
-        $grid->column('name', __('user-task::order.name'));
+        $grid->column('user_task.title', __('user-task::order.user_task_id'));
+        $grid->column('user.username', __('user-task::order.user_id'));
+        $grid->column('status', __('user-task::order.status.label'))
+            ->using(__('user-task::order.status.value'));
 
         return $grid;
     }
@@ -57,7 +63,15 @@ class OrderController extends AdminController
         $show = new Show(UserTaskOrder::findOrFail($id));
 
         $show->field('id', __('user-task::order.id'));
-        $show->field('name', __('user-task::order.name'));
+        $show->field('user_id', __('user-task::order.user_id'))->as(function () {
+            return $this->user ? $this->user->username : trans('user-task::message.record_does_not_exist');
+        });
+        $show->field('user_task_id', __('user-task::order.user_task_id'))->as(function () {
+            return $this->user_task ? $this->user_task->title : trans('user-task::message.record_does_not_exist');
+        });
+        $show->field('files', __('user-task::order.user_task_id'))->carousel();
+        $show->field('status', __('user-task::order.status.label'))
+            ->using(__('user-task::order.status.value'));
 
         return $show;
     }
