@@ -44,7 +44,7 @@ $ composer require jncinet/qihucms-user-task
 - 完成任务提交凭证
     - 请求方法：PUT|PATCH
     - 链接地址：task/orders/{id=任务ID}
-    - 请求参数：
+    - 请求参数：  
         - 任务ID | user_task_id | int | 必填
         - 根据任务要求完的任务的图片记录 | files | array | 可选
         - 根据任务要求填写的说明 | remark | string ｜ 可选
