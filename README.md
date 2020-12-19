@@ -41,12 +41,19 @@ $ composer require jncinet/qihucms-user-task
     - 链接地址：task/orders
     - 请求参数：
         - 任务ID | user_task_id | 必须是有效的任务ID
+- 完成任务提交凭证
+    - 请求方法：PUT|PATCH
+    - 链接地址：task/orders/{id=任务ID}
+    - 请求参数：
+        - 任务ID | user_task_id | int | 必填
+        - 根据任务要求完的任务的图片记录 | files | array | 可选
+        - 根据任务要求填写的说明 | remark | string ｜ 可选
 - 任务主审核完成记录
     - 请求方法：POST
     - 链接地址：task/orders/audit/{id=任务ID}
 
 > {id}是变量参数  
-task前缀可通过在/config/qihu.php中设置user_task_prefix设置
+task前缀可通过在/config/qihu.php中设置user_task_prefix修改
 
 
 ## 事件
