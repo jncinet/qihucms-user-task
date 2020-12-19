@@ -107,21 +107,21 @@ $ composer require jncinet/qihucms-user-task
 
 ## 数据库
 ### 任务表：user_tasks
-| Field | Type | Length | AllowNull | Default | Comment |
-| :---- | :---- | :---- | :---- | :---- | :---- |
-| id | bigint | - |
-| user_id | bigint | - |
-| title | varchar | 255 |
-| thumbnail | varchar | 255 | Y |
-| start_time | timestamp | - | Y |
-| end_time | timestamp | - | Y |
-| stock | int | - | - |
-| currency_type_id | bigint | - |
-| amount | decimal | 10,2 | 0.00 |
-| content | longtext | - | Y | - |
-| btn_text | varchar | 255 | Y | NULL |
-| link | varchar | 255 | Y | NULL |
-| pay_status | tinyint | - | 0 |
-| status | tinyint | - | 0 |
-| created_at | timestamp | - | Y | NULL |
-| updated_at | timestamp | - | Y | NULL |
+| Field             | Type      | Length    | AllowNull | Default   | Comment   |
+| :----             | :----     | :----     | :----     | :----     | :----     |
+| id                | bigint    |           |           |           |           |
+| user_id           | bigint    |           |           |           | 发布会员ID |
+| title             | varchar   | 255       |           |           | 任务标题   |
+| thumbnail         | varchar   | 255       | Y         | NULL      | 缩略图地址 |
+| start_time        | timestamp |           | Y         | NULL      | 开始时间   |
+| end_time          | timestamp |           | Y         | NULL      | 结束时间   |
+| stock             | int       |           |           | 0         | 任务总数量 |
+| currency_type_id  | bigint    |           |           |           | 奖励类型ID |
+| amount            | decimal   | 10,2      |           | 0.00      | 奖励金额   |
+| content           | longtext  |           | Y         |           | 任务介绍   |
+| btn_text          | varchar   | 255       | Y         | NULL      | 链接文字   |
+| link              | varchar   | 255       | Y         | NULL      | 链接地址   |
+| pay_status        | tinyint   |           | 0         | 0         | 奖金托管状态|
+| status            | tinyint   |           | 0         | 0         | 任务状态   |
+| created_at        | timestamp |           | Y         | NULL      | 创建时间   |
+| updated_at        | timestamp |           | Y         | NULL      | 更新时间   |
