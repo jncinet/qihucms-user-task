@@ -2,7 +2,7 @@
 
 namespace Qihucms\UserTask\Controllers\Api;
 
-use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -14,7 +14,7 @@ use Qihucms\UserTask\Requests\StoreRequest;
 use Qihucms\UserTask\Resources\UserTaskCollection;
 use Qihucms\UserTask\Resources\UserTask as UserTaskResource;
 
-class TaskController extends ApiController
+class TaskController extends Controller
 {
     public function __construct()
     {

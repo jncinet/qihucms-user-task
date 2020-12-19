@@ -2,7 +2,7 @@
 
 namespace Qihucms\UserTask\Controllers\Api;
 
-use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Qihucms\Currency\Currency;
@@ -12,7 +12,7 @@ use Qihucms\UserTask\Requests\StoreOrderRequest;
 use Qihucms\UserTask\Resources\UserTaskOrder as UserTaskOrderResource;
 use Qihucms\UserTask\Resources\UserTaskOrderCollection;
 
-class OrderController extends ApiController
+class OrderController extends Controller
 {
     public function __construct()
     {

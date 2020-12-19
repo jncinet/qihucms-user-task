@@ -25,7 +25,7 @@ class CreateUserTaskTables extends Migration
             $table->unsignedBigInteger('currency_type_id')->comment('奖励类型');
             $table->unsignedDecimal('amount')->default(0)->comment('奖励数额');
             $table->longText('content')->nullable()->comment('详细介绍');
-            $table->string('btn_text')->nullable()->comment('任务链文字');
+            $table->string('btn_text')->nullable()->comment('任务链接按钮文字');
             $table->string('link')->nullable()->comment('任务链接');
             $table->boolean('pay_status')->default(0)->comment('支付状态');
             $table->boolean('status')->default(0)->comment('状态');
