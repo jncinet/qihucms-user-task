@@ -31,6 +31,7 @@ class UserTask extends JsonResource
             'btn_text' => $this->btn_text,
             'link' => $this->link,
             'pay_status' => $this->pay_status,
+            'user_task_orders' => $this->user_task_orders ? new UserTaskOrderCollection($this->user_task_orders) : null,
             'status' => $this->status,
             'created_at' => Carbon::parse($this->created_at)->diffForHumans()
         ];

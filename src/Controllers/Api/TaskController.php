@@ -101,7 +101,7 @@ class TaskController extends Controller
      */
     public function userShow($id)
     {
-        $task = UserTask::where('user_id', \Auth::id())->where('id', $id)->first();
+        $task = UserTask::where('user_id', \Auth::id())->where('id', $id)->with('user_task_orders')->first();
 
         return new UserTaskResource($task);
     }
@@ -134,6 +134,12 @@ class TaskController extends Controller
         $data['user_id'] = \Auth::id();
         $data['pay_status'] = 1;
         $data['status'] = 0;
+        if (!isset($data['start_time']) || empty($data['start_time'])) {
+            $data['start_time'] = now();
+        }
+        if (!isset($data['end_time']) || empty($data['end_time'])) {
+            $data['end_time'] = now()->addDays(3);
+        }
 
         $result = UserTask::create($data);
 

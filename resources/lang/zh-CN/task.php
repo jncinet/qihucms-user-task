@@ -11,7 +11,7 @@ return [
     'currency_type_id' => '奖励类型',
     'amount' => '奖励数额',
     'content' => '详细介绍',
-    'btn_text' => '任务链文字',
+    'btn_text' => '链接按钮文字',
     'link' => '任务链接',
     'pay_status' => [
         'label' => '支付状态',
