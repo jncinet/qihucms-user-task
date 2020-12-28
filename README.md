@@ -7,6 +7,15 @@
 ```shell
 $ composer require jncinet/qihucms-user-task
 ```
+## 开始
+### 数据迁移
+```shell
+$ php artisan migrate
+```
+### 发布资源
+```shell
+$ php artisan vendor:publish --provider="Qihucms\UserTask\TaskServiceProvider"
+```
 
 ## 路由
 ### admin
