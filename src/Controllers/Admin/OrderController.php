@@ -2,15 +2,15 @@
 
 namespace Qihucms\UserTask\Controllers\Admin;
 
+use App\Admin\Controllers\Controller;
 use App\Models\User;
 use Qihucms\UserTask\Models\UserTask;
 use Qihucms\UserTask\Models\UserTaskOrder;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class OrderController extends AdminController
+class OrderController extends Controller
 {
     /**
      * Title for current resource.

@@ -2,15 +2,15 @@
 
 namespace Qihucms\UserTask\Controllers\Admin;
 
+use App\Admin\Controllers\Controller;
 use App\Models\User;
 use Qihucms\Currency\Models\CurrencyType;
 use Qihucms\UserTask\Models\UserTask;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class TaskController extends AdminController
+class TaskController extends Controller
 {
     /**
      * Title for current resource.
