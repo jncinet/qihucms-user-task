@@ -92,7 +92,7 @@ class OrderController extends Controller
                     return [$model->id => $model->username];
                 }
             })
-            ->ajax(route('admin.api.users'))
+            ->ajax(route('admin.select.user'))
             ->rules('required');
 
         $form->select('user_task_id', __('user-task::order.user_task_id'))
